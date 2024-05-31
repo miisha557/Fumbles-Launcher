@@ -1,5 +1,5 @@
 name: fumbles_launcher
-description: "A new Flutter project."
+description: "Fumbles Launcher"
 publish_to: 'none'
 version: 0.1.0
 
@@ -7,7 +7,7 @@ environment:
   sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
-  file_saver: ^0.2.12
+  dio: ^5.4.2+1
   flutter:
     sdk: flutter
   http: ^1.2.1

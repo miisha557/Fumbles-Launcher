@@ -166,16 +166,16 @@ class Package {
 
 class Arguments {
 	List<String>? game;
-	List<Jvm>? jvm;
+	List? jvm;
 
 	Arguments({this.game, this.jvm});
 
 	Arguments.fromJson(Map<String, dynamic> json) {
 		game = json['game'].cast<String>();
 		if (json['jvm'] != null) {
-			jvm = <Jvm>[];
+			jvm = [];
 			json['jvm'].forEach((v) {
-				jvm!.add(Jvm.fromJson(v));
+        jvm!.add(v);
 			});
 		}
 	}
@@ -190,31 +190,54 @@ class Arguments {
 	}
 }
 
-class Jvm {
-	List<Rules>? rules;
-	List<String>? value;
-
-	Jvm({this.rules, this.value});
-
-	Jvm.fromJson(Map<String, dynamic> json) {
-		if (json['rules'] != null) {
-			rules = <Rules>[];
-			json['rules'].forEach((v) {
-				rules!.add(Rules.fromJson(v));
-			});
-		}
-		value = json['value'].cast<String>();
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = <String, dynamic>{};
-		if (rules != null) {
-			data['rules'] = rules!.map((v) => v.toJson()).toList();
-		}
-		data['value'] = value;
-		return data;
-	}
-}
+// class JvmBroken {
+// 	List<Rules>? rules;
+// 	List<String>? value;
+// 
+// 	JvmBroken({this.rules, this.value});
+// 
+// 	JvmBroken.fromJson(Map<String, dynamic> json) {
+// 		if (json['rules'] != null) {
+// 			rules = <Rules>[];
+// 			json['rules'].forEach((v) {
+// 				rules!.add(Rules.fromJson(v));
+// 			});
+// 		} else {
+//       rules!.add(Rules.fromJson({'null': 'null'}));
+//     }
+//     
+// 		if (json['value'].runtimeType == List) {
+//       value = json['value'].cast<String>();
+//     } else {
+//       value?.add(json['value']);
+//     }
+// 	}
+// 
+// 	Map<String, dynamic> toJson() {
+// 		final Map<String, dynamic> data = <String, dynamic>{};
+// 		if (rules != null) {
+// 			data['rules'] = rules!.map((v) => v.toJson()).toList();
+// 		}
+// 		data['value'] = value;
+// 		return data;
+// 	}
+// }
+// 
+// class Jvm {
+//   List? argument;
+//   
+//   Jvm({this.argument});
+//   
+//   Jvm.fromJson(Map<String, dynamic> json) {
+//     argument: json
+//   }
+//   
+//   Map<String, dynamic> toJson() {
+//  	final Map<String, dynamic> data = <String, dynamic>{};
+//  	data['value'] = value;
+//  	return data;
+//  }
+// }
 
 class Rules {
 	String? action;
