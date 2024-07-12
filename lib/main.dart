@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'classes.dart';
 import 'functions.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
 	const MyApp({super.key});
@@ -14,15 +17,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-	late Future<List<DropdownMenuEntry>> versions;
+	Future<List<DropdownMenuEntry>>? versions;
 	final TextEditingController versionController = TextEditingController();
-	String? selectedVersion;
-	var pathValue = 'C:/Games/Minecraft/Fumbles';
+	Version? selectedVersion;
+	String pathValue = 'C:/Games/Minecraft/Fumbles';
 
 	@override
 	void initState() {
 		super.initState();
-		versions = basicFetchVersions();
+    versions = getManifest(pathValue);
 	}
 
 	@override
@@ -57,9 +60,9 @@ class _MyAppState extends State<MyApp> {
 									},
 								),
 							),
-              
+							
 							const SizedBox(height: 20),
-              
+							
 							FutureBuilder(
 								future: versions,
 								builder: (context, snapshot) {
@@ -69,12 +72,12 @@ class _MyAppState extends State<MyApp> {
 											hintText: 'Version',
 											dropdownMenuEntries: snapshot.data!,
 											onSelected: (value) {
-												versionController.text = value;
 												setState(() {
 													selectedVersion = value;
 												});
+												versionController.text = selectedVersion!.url;
 											},
-											helperText: selectedVersion?.toString(),
+											helperText: selectedVersion?.url.toString(),
 										);
 									} else if (snapshot.hasError) {
 										return Text('${snapshot.error}');
@@ -83,22 +86,24 @@ class _MyAppState extends State<MyApp> {
 									return const CircularProgressIndicator();
 								},
 							),
-              
+							
 							const SizedBox(height: 20),
-              
-              ElevatedButton(
-                onPressed: selectedVersion == null ? null : () {
-                  var pathValueOrig = pathValue;
-                  
-                  var versionName = selectedVersion.toString().split('/').last;
-                  downloadManifest(pathValue);
-                  downloadVersionJson(selectedVersion.toString(), versionName, pathValue);
-                  downloadLibraries(selectedVersion!);
-                  
-                  pathValue = pathValueOrig;
-                },
-                child: const Text('Download JSON of selected version')
-              ),
+							
+							ElevatedButton(
+								onPressed: selectedVersion == null ? null : () async{
+									var pathValueOrig = pathValue;
+									
+									var versionName = selectedVersion!.url.split('/').last;
+									Package verPackage = await downloadVersionJson(selectedVersion!.url, versionName, pathValue, selectedVersion!.sha1);
+									String libCP = await downloadLibraries(verPackage, pathValue);
+									await downloadClient(verPackage, versionName, pathValue);
+									await downloadAssets(verPackage, pathValue);
+									launchMinecraft(pathValue, versionName, libCP);
+									
+									pathValue = pathValueOrig;
+								},
+								child: const Text('Download selected version')
+							),
 						],
 					),
 				),

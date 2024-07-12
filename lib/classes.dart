@@ -1,22 +1,20 @@
 export 'classes.dart';
 
 class Manifest {
-	final Latest latest;
-	final List versions;
+	Latest? latest;
+  List<Version>? versions;
 
-	const Manifest({
+	Manifest({
 		required this.latest,
-		required this.versions,
+    this.versions,
 	});
 
-	factory Manifest.fromJson(json) {
-			// final latests = json['latest'] as Object?;
-		return Manifest(
-			// latest: latests != null ? latests.map((latests) => Latest.fromJson(latests as Map<String, dynamic>)).toList() : <Latest>[],
-			latest: Latest.fromJson(json['latest']),
-			// latest: json['latest'] as List<dynamic>,
-			versions: json['versions'],
-		);
+	Manifest.fromJson(json) {
+			latest = Latest.fromJson(json['latest']);
+      versions = <Version>[];
+			json['versions'].forEach((v) {
+				versions!.add(Version.fromJson(v));
+			});
 	}
 }
 
@@ -175,7 +173,7 @@ class Arguments {
 		if (json['jvm'] != null) {
 			jvm = [];
 			json['jvm'].forEach((v) {
-        jvm!.add(v);
+				jvm!.add(v);
 			});
 		}
 	}
@@ -189,55 +187,6 @@ class Arguments {
 		return data;
 	}
 }
-
-// class JvmBroken {
-// 	List<Rules>? rules;
-// 	List<String>? value;
-// 
-// 	JvmBroken({this.rules, this.value});
-// 
-// 	JvmBroken.fromJson(Map<String, dynamic> json) {
-// 		if (json['rules'] != null) {
-// 			rules = <Rules>[];
-// 			json['rules'].forEach((v) {
-// 				rules!.add(Rules.fromJson(v));
-// 			});
-// 		} else {
-//       rules!.add(Rules.fromJson({'null': 'null'}));
-//     }
-//     
-// 		if (json['value'].runtimeType == List) {
-//       value = json['value'].cast<String>();
-//     } else {
-//       value?.add(json['value']);
-//     }
-// 	}
-// 
-// 	Map<String, dynamic> toJson() {
-// 		final Map<String, dynamic> data = <String, dynamic>{};
-// 		if (rules != null) {
-// 			data['rules'] = rules!.map((v) => v.toJson()).toList();
-// 		}
-// 		data['value'] = value;
-// 		return data;
-// 	}
-// }
-// 
-// class Jvm {
-//   List? argument;
-//   
-//   Jvm({this.argument});
-//   
-//   Jvm.fromJson(Map<String, dynamic> json) {
-//     argument: json
-//   }
-//   
-//   Map<String, dynamic> toJson() {
-//  	final Map<String, dynamic> data = <String, dynamic>{};
-//  	data['value'] = value;
-//  	return data;
-//  }
-// }
 
 class Rules {
 	String? action;
@@ -314,8 +263,7 @@ class DownloadsMappings {
 			{this.client, this.clientMappings, this.server, this.serverMappings});
 
 	DownloadsMappings.fromJson(Map<String, dynamic> json) {
-		client =
-				json['client'] != null ? ClientMapping.fromJson(json['client']) : null;
+		client = json['client'] != null ? ClientMapping.fromJson(json['client']) : null;
 		clientMappings = json['client_mappings'] != null
 				? ClientMapping.fromJson(json['client_mappings'])
 				: null;
@@ -528,5 +476,29 @@ class File {
 		data['size'] = size;
 		data['url'] = url;
 		return data;
+	}
+}
+
+
+class Assets {
+  Map<String, dynamic> objects;
+  
+  Assets({required this.objects});
+  factory Assets.fromJson(json) {
+    return Assets(objects: json['objects']);
+  }
+}
+
+class Asset {
+	final String hash;
+	final int size;
+  
+	Asset({required this.hash, required this.size});
+	
+	factory Asset.fromJson(json) {
+		return Asset(
+			hash: json['hash'] as String,
+			size: json['size'] as int,
+		);
 	}
 }

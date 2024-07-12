@@ -10,6 +10,10 @@
 .svn/
 migrate_working_dir/
 
+# Sometimes, minecraft decides to create log files where it's started
+# So let's ignore them, please
+logs
+
 # IntelliJ related
 *.iml
 *.ipr
