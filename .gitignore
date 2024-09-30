@@ -9,10 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-
-# Sometimes, minecraft decides to create log files where it's started
-# So let's ignore them, please
-logs
+*.env
 
 # IntelliJ related
 *.iml
@@ -34,6 +31,9 @@ logs
 .pub-cache/
 .pub/
 /build/
+/android/
+/ios/
+/web
 
 # Symbolication related
 app.*.symbols

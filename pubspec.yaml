@@ -7,16 +7,21 @@ environment:
   sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
+  background_downloader: ^8.5.6
   crypto: ^3.0.3
   dio: ^5.4.2+1
   flutter:
     sdk: flutter
+  flutter_dotenv: ^5.1.0
   http: ^1.2.1
+  hyper_thread_downloader: ^1.0.5+3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env
