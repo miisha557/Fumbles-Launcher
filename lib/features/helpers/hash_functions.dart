@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-String hashStrings(String input) {
+String hashString(String input) {
   String salt = dotenv.env['SALT']!;
 
   final String saltedInput = input + salt;
