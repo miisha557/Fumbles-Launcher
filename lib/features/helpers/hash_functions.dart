@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:async';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future<String> hashString(String input) async{
+Future<String> hashString(String input) {
   String salt = dotenv.env['SALT']!;
 
   final String saltedInput = input + salt;
